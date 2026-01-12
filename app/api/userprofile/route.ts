@@ -1,34 +1,42 @@
 import { NextResponse } from "next/server";
 import axios from "axios";
+import { cookies } from "next/headers";
 
-export async function GET(request: Request) {
+export async function GET() {
   try {
-    
+    const cookieStore = await cookies();
+    const token = cookieStore.get("auth_token")?.value; 
 
-    const response = await axios.post(
-      "http://localhost:8001/api/userprofile",
-  
-    );
+    if (!token) {
+      return NextResponse.json(
+        { message: "Unauthorized: No token found" },
+        { status: 401 }
+      );
+    }
 
-    const token = response.data.token;
-
-    const res = NextResponse.json(
-      { message: "Login successful" },
-      { status: 200 }
-    );
-
-   
-
-    return res;
-   
-    
-
-  } catch (error: any) {
-    return NextResponse.json(
+    const response = await axios.get(
+      "http://localhost:8002/api/user/profile",
       {
-        message: error.response?.data?.message || "Login failed"
-      },
-      { status: error.response?.status || 500 }
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+      }
+    );
+    return NextResponse.json(response.data);
+    
+
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      console.error("Axios Error:", error.response?.data || error.message);
+      return NextResponse.json(
+        { message: error.response?.data?.message || "Backend service error" },
+        { status: error.response?.status || 500 }
+      );
+    }
+
+    return NextResponse.json(
+      { message: "Internal Server Error" },
+      { status: 500 }
     );
   }
 }

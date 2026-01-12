@@ -1,14 +1,16 @@
 import { requireAuth } from "@/lib/auth";
 
-export default async function RootLayout({
+export default async function ProtectedLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  await requireAuth(); // 🔐 server protection
-  return <>
-   <h1>Hello sanjay</h1>
-  {children}
-  <h1>This is for test footer</h1>
-  </>;
+  const user = await requireAuth(); // Protects everything in (protected) group
+  
+  return (
+    <div className="auth-wrapper">
+      <nav>Welcome back, {user.username}</nav>
+      {children}
+    </div>
+  );
 }

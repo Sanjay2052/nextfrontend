@@ -2,39 +2,36 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import jwt from "jsonwebtoken";
 
+// 1. Define the interface so TS knows what a "UserPayload" looks like
 export interface UserPayload {
   userid: string;
-  email:string;
+  email: string;
   username: string;
-  role:string;
+  role: string;
 }
+
+const SECRET = process.env.JWT_SECRET || "secret";
 
 export const verifyToken = (token: string): UserPayload => {
   try {
-    return jwt.verify(token, "secret") as UserPayload;
+    // 2. Cast the decoded JWT to your interface
+    return jwt.verify(token, SECRET) as UserPayload;
   } catch {
     throw new Error('Invalid token');
   }
 };
 
-export const requireAuth = async () => {
+export const requireAuth = async (): Promise<UserPayload> => {
   const cookieStore = await cookies();
   const token = cookieStore.get('auth_token')?.value;
-
-//   console.log('Token:', token); // Debugging line
-//   console.log('Allowed Roles:', allowedRoles); // Debugging line
   
   if (!token) {
-    // console.log('No token found'); // Debugging line
     redirect('/login');
   }
 
   try {
-    const user = verifyToken(token);
-   
-    return user;
+    return verifyToken(token);
   } catch {
-    console.log('Token verification failed'); // Debugging line
     redirect('/login');
   }
 };
