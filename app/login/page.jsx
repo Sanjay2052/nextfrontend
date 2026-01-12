@@ -19,6 +19,8 @@ const Login = () => {
         }
     }
 
+
+    
     return (
         <div className="main-body">
             {/* Background Decorative Circles */}
@@ -36,7 +38,7 @@ const Login = () => {
                     </p>
                     <div className="signup-text">
                         Don't have an account?<br />
-                        <a href="#">Get started!</a>
+                        <a href="/register">Get started!</a>
                     </div>
                     <div className="legal-links">
                         Read our <a href="#">terms</a> and <a href="#">conditions</a>
