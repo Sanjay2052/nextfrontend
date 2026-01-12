@@ -5,35 +5,29 @@ export async function POST(request: Request) {
   try {
     const data = await request.json();
 
-    const response = await axios.post(
-      "http://localhost:8001/api/login",
-      data
-    );
-
+    const response = await axios.post("http://localhost:8001/api/login", data);
     const token = response.data.token;
+    if (!token) {
+      return NextResponse.json({ message: "No token received" }, { status: 401 });
+    }
 
     const res = NextResponse.json(
       { message: "Login successful" },
       { status: 200 }
     );
 
-   
     res.cookies.set("auth_token", token, {
-      httpOnly: true,
+      httpOnly: true, 
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
-      maxAge: 60 * 60 * 24 
+      maxAge: 60 * 60 * 24,
+      path: "/", 
     });
-     console.log(token);
-    return res;
-   
-    
 
+    return res;
   } catch (error: any) {
     return NextResponse.json(
-      {
-        message: error.response?.data?.message || "Login failed"
-      },
+      { message: error.response?.data?.message || "Login failed" },
       { status: error.response?.status || 500 }
     );
   }

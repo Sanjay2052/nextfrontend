@@ -4,7 +4,7 @@ import { ThumbsUp, ThumbsDown, Bold, Code } from 'lucide-react';
 import axios from 'axios';
 import { useParams } from 'next/navigation';
 
-// Interfaces for Type Safety
+
 interface Question {
   _id: string;
   title: string;
@@ -31,16 +31,13 @@ const QuestionDetail: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [answerText, setAnswerText] = useState<string>('');
 
-  // 1. Fetch Data from Microservices
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        // Question Service
         const qRes = await axios.get(`http://localhost:8003/api/question/${id}`);
         setQuestion(qRes.data);
-
-        // Answer Service - Fetching all answers linked to this question ID
         const aRes = await axios.get(`http://localhost:8004/api/answer/${id}`);
         setAnswers(Array.isArray(aRes.data) ? aRes.data : []);
       } catch (error) {
