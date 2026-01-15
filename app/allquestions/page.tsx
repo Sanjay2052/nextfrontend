@@ -1,20 +1,18 @@
 'use client'
 
-import React, { use, useState } from 'react';
+import React, { use, useEffect, useState } from 'react';
 import { Search, Filter, Github, Twitter, Linkedin } from 'lucide-react';
 import axios from 'axios';
 
 // Types
 interface Question {
   id: number;
-  votes: number;
-  answers: number;
-  views: number;
   title: string;
-  excerpt: string;
   tags: string[];
-  author: string;
-  authorAvatar: string;
+  description: string;
+  userId: string;
+  views: number;
+  votes: number;
   askedTime: string;
   lastActivity: Date;
   hasAcceptedAnswer: boolean;
@@ -28,133 +26,158 @@ interface Tag {
 type FilterType = 'newest' | 'active' | 'unanswered';
 
 const QuestionsPage: React.FC = () => {
-  const [activeFilter, setActiveFilter] = useState<FilterType>('newest');
-  const [searchQuery, setSearchQuery] = useState<string>('');
-  const [allquestions,setallquestions]=useState([])
+  // const [activeFilter, setActiveFilter] = useState<FilterType>('newest');
+  // const [searchQuery, setSearchQuery] = useState<string>('');
+  // const [allquestions,setallquestions]=useState([])
 
-  async function fetchallquestions(){
-    let response=await axios.get("http://localhost:8003/api/question")
-    setallquestions(response.data)
-  }
 
-  const allQuestions: Question[] = [
-    {
-      id: 1,
-      votes: 45,
-      answers: 12,
-      views: 1205,
-      title: 'How to implement authentication with React and Node.js?',
-      excerpt: "I'm trying to build a secure authentication system using JWT tokens. I have the backend set up but I'm struggling with storing the token securely on the frontend...",
-      tags: ['react', 'node.js', 'authentication', 'jwt'],
-      author: 'Sarah Chen',
-      authorAvatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop',
-      askedTime: '2 hours ago',
-      lastActivity: new Date(Date.now() - 2 * 60 * 60 * 1000),
-      hasAcceptedAnswer: false
-    },
-    {
-      id: 2,
-      votes: 32,
-      answers: 5,
-      views: 850,
-      title: 'Understanding useEffect dependency array behavior',
-      excerpt: "My effect is running in an infinite loop even though I think I've set the dependencies correctly. Here is my code snippet...",
-      tags: ['react', 'hooks', 'javascript'],
-      author: 'Mike Ross',
-      authorAvatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop',
-      askedTime: '4 hours ago',
-      lastActivity: new Date(Date.now() - 4 * 60 * 60 * 1000),
-      hasAcceptedAnswer: false
-    },
-    {
-      id: 3,
-      votes: 128,
-      answers: 24,
-      views: 5400,
-      title: 'Best practices for CSS Grid vs Flexbox',
-      excerpt: "When should I use Grid over Flexbox? I understand the basic difference (2D vs 1D) but in practice I find myself using Flexbox for everything...",
-      tags: ['css', 'grid', 'flexbox', 'layout'],
-      author: 'Emma Wilson',
-      authorAvatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop',
-      askedTime: '1 day ago',
-      lastActivity: new Date(Date.now() - 24 * 60 * 60 * 1000),
-      hasAcceptedAnswer: true
-    },
-    {
-      id: 4,
-      votes: 56,
-      answers: 8,
-      views: 1100,
-      title: 'TypeScript generic type inference issue',
-      excerpt: "I have a generic function that should infer the return type based on the input, but it keeps returning 'any'. How can I fix this?",
-      tags: ['typescript', 'generics'],
-      author: 'Type Master',
-      authorAvatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop',
-      askedTime: '3 days ago',
-      lastActivity: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
-      hasAcceptedAnswer: false
-    },
-    {
-      id: 5,
-      votes: 89,
-      answers: 0,
-      views: 2300,
-      title: 'How to optimize React rendering performance?',
-      excerpt: "My React app is getting slow with large lists. I've tried useMemo and React.memo but still seeing performance issues. What am I missing?",
-      tags: ['react', 'performance', 'optimization'],
-      author: 'Alex Turner',
-      authorAvatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop',
-      askedTime: '5 hours ago',
-      lastActivity: new Date(Date.now() - 5 * 60 * 60 * 1000),
-      hasAcceptedAnswer: false
-    },
-    {
-      id: 6,
-      votes: 23,
-      answers: 0,
-      views: 456,
-      title: 'Next.js 14 server actions best practices',
-      excerpt: "What are the recommended patterns for using server actions in Next.js 14? Should I use them for all server-side operations?",
-      tags: ['next.js', 'server-actions', 'react'],
-      author: 'David Kim',
-      authorAvatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&h=100&fit=crop',
-      askedTime: '1 hour ago',
-      lastActivity: new Date(Date.now() - 1 * 60 * 60 * 1000),
-      hasAcceptedAnswer: false
+  // async function fetchallquestions(){
+  //   let response=await axios.get("http://localhost:8003/api/question")
+  //   setallquestions(response.data)
+  // }
+
+  // const allQuestions: Question[] = [
+  //   {
+  //     id: 1,
+  //     votes: 45,
+  //     answers: 12,
+  //     views: 1205,
+  //     title: 'How to implement authentication with React and Node.js?',
+  //     excerpt: "I'm trying to build a secure authentication system using JWT tokens. I have the backend set up but I'm struggling with storing the token securely on the frontend...",
+  //     tags: ['react', 'node.js', 'authentication', 'jwt'],
+  //     author: 'Sarah Chen',
+  //     authorAvatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop',
+  //     askedTime: '2 hours ago',
+  //     lastActivity: new Date(Date.now() - 2 * 60 * 60 * 1000),
+  //     hasAcceptedAnswer: false
+  //   },
+  //   {
+  //     id: 2,
+  //     votes: 32,
+  //     answers: 5,
+  //     views: 850,
+  //     title: 'Understanding useEffect dependency array behavior',
+  //     excerpt: "My effect is running in an infinite loop even though I think I've set the dependencies correctly. Here is my code snippet...",
+  //     tags: ['react', 'hooks', 'javascript'],
+  //     author: 'Mike Ross',
+  //     authorAvatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop',
+  //     askedTime: '4 hours ago',
+  //     lastActivity: new Date(Date.now() - 4 * 60 * 60 * 1000),
+  //     hasAcceptedAnswer: false
+  //   },
+  //   {
+  //     id: 3,
+  //     votes: 128,
+  //     answers: 24,
+  //     views: 5400,
+  //     title: 'Best practices for CSS Grid vs Flexbox',
+  //     excerpt: "When should I use Grid over Flexbox? I understand the basic difference (2D vs 1D) but in practice I find myself using Flexbox for everything...",
+  //     tags: ['css', 'grid', 'flexbox', 'layout'],
+  //     author: 'Emma Wilson',
+  //     authorAvatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop',
+  //     askedTime: '1 day ago',
+  //     lastActivity: new Date(Date.now() - 24 * 60 * 60 * 1000),
+  //     hasAcceptedAnswer: true
+  //   },
+  //   {
+  //     id: 4,
+  //     votes: 56,
+  //     answers: 8,
+  //     views: 1100,
+  //     title: 'TypeScript generic type inference issue',
+  //     excerpt: "I have a generic function that should infer the return type based on the input, but it keeps returning 'any'. How can I fix this?",
+  //     tags: ['typescript', 'generics'],
+  //     author: 'Type Master',
+  //     authorAvatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop',
+  //     askedTime: '3 days ago',
+  //     lastActivity: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
+  //     hasAcceptedAnswer: false
+  //   },
+  //   {
+  //     id: 5,
+  //     votes: 89,
+  //     answers: 0,
+  //     views: 2300,
+  //     title: 'How to optimize React rendering performance?',
+  //     excerpt: "My React app is getting slow with large lists. I've tried useMemo and React.memo but still seeing performance issues. What am I missing?",
+  //     tags: ['react', 'performance', 'optimization'],
+  //     author: 'Alex Turner',
+  //     authorAvatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop',
+  //     askedTime: '5 hours ago',
+  //     lastActivity: new Date(Date.now() - 5 * 60 * 60 * 1000),
+  //     hasAcceptedAnswer: false
+  //   },
+  //   {
+  //     id: 6,
+  //     votes: 23,
+  //     answers: 0,
+  //     views: 456,
+  //     title: 'Next.js 14 server actions best practices',
+  //     excerpt: "What are the recommended patterns for using server actions in Next.js 14? Should I use them for all server-side operations?",
+  //     tags: ['next.js', 'server-actions', 'react'],
+  //     author: 'David Kim',
+  //     authorAvatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&h=100&fit=crop',
+  //     askedTime: '1 hour ago',
+  //     lastActivity: new Date(Date.now() - 1 * 60 * 60 * 1000),
+  //     hasAcceptedAnswer: false
+  //   }
+  // ];
+
+  // const popularTags: Tag[] = [
+  //   { name: 'javascript', count: 1240 },
+  //   { name: 'react', count: 980 },
+  //   { name: 'python', count: 850 },
+  //   { name: 'java', count: 720 },
+  //   { name: 'css', count: 650 },
+  //   { name: 'node.js', count: 540 }
+  // ];
+
+  // const getFilteredQuestions = (): Question[] => {
+  //   let filtered = [...allQuestions];
+
+  //   if (activeFilter === 'newest') {
+  //     filtered.sort((a, b) => b.lastActivity.getTime() - a.lastActivity.getTime());
+  //   } else if (activeFilter === 'active') {
+  //     filtered.sort((a, b) => b.lastActivity.getTime() - a.lastActivity.getTime());
+  //   } else if (activeFilter === 'unanswered') {
+  //     filtered = filtered.filter(q => q.answers === 0);
+  //   }
+
+  //   if (searchQuery) {
+  //     filtered = filtered.filter(q => 
+  //       q.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  //       q.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
+  //     );
+  //   }
+
+  //   return filtered;
+  // };
+
+  //const filteredQuestions = getFilteredQuestions();
+
+
+  let [allquestions, setallquestions] = useState<Question[]>([])
+  let [alltag, settag] = useState([])
+
+
+  useEffect(() => {
+
+    let fetchquestion = async () => {
+
+      try {
+        let response = await axios.get("http://localhost:8003/api/question")
+        let data = response.data
+        console.log("data:", data);
+        setallquestions(data)
+      } catch (error) {
+        console.error(error);
+
+      }
+
     }
-  ];
+    fetchquestion()
+  }, [])
 
-  const popularTags: Tag[] = [
-    { name: 'javascript', count: 1240 },
-    { name: 'react', count: 980 },
-    { name: 'python', count: 850 },
-    { name: 'java', count: 720 },
-    { name: 'css', count: 650 },
-    { name: 'node.js', count: 540 }
-  ];
-
-  const getFilteredQuestions = (): Question[] => {
-    let filtered = [...allQuestions];
-
-    if (activeFilter === 'newest') {
-      filtered.sort((a, b) => b.lastActivity.getTime() - a.lastActivity.getTime());
-    } else if (activeFilter === 'active') {
-      filtered.sort((a, b) => b.lastActivity.getTime() - a.lastActivity.getTime());
-    } else if (activeFilter === 'unanswered') {
-      filtered = filtered.filter(q => q.answers === 0);
-    }
-
-    if (searchQuery) {
-      filtered = filtered.filter(q => 
-        q.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        q.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
-      );
-    }
-
-    return filtered;
-  };
-
-  const filteredQuestions = getFilteredQuestions();
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -181,8 +204,7 @@ const QuestionsPage: React.FC = () => {
                 <input
                   type="text"
                   placeholder="Search questions..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+
                   className="w-80 pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700"
                 />
               </div>
@@ -207,7 +229,7 @@ const QuestionsPage: React.FC = () => {
               </button>
             </div>
 
-            {/* Filter Tabs */}
+            {/* Filter Tabs
             <div className="bg-white rounded-lg shadow-sm mb-6 p-4">
               <div className="flex items-center space-x-4">
                 <button
@@ -245,56 +267,78 @@ const QuestionsPage: React.FC = () => {
                   <span>Filter</span>
                 </button>
               </div>
-            </div>
+            </div> */}
 
             {/* Questions */}
             <div className="space-y-4">
-              {allQuestions.map((question) => (
-                <div key={question.id} className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
+              {allquestions.map((question) => (
+                <div
+                  key={question.id}
+                  className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow"
+                >
                   <div className="flex gap-6">
+
                     {/* Stats */}
                     <div className="flex flex-col items-center space-y-4 text-sm min-w-24">
                       <div className="text-center">
-                        <div className="text-xl font-semibold text-gray-900">{question.votes}</div>
+                        <div className="text-xl font-semibold text-gray-900">
+                          {question.votes}
+                        </div>
                         <div className="text-gray-600">votes</div>
                       </div>
+
                       <div className="text-center">
-                        <div className={`text-xl font-semibold ${question.answers > 0 ? (question.hasAcceptedAnswer ? 'text-green-600' : 'text-gray-900') : 'text-gray-400'}`}>
-                          {question.answers}
+                        <div
+                          className={`text-xl font-semibold ${question.hasAcceptedAnswer
+                              ? "text-green-600"
+                              : "text-gray-900"
+                            }`}
+                        >
+                          {question.hasAcceptedAnswer ? "✔" : "—"}
                         </div>
-                        <div className="text-gray-600">answers</div>
+                        <div className="text-gray-600">accepted</div>
                       </div>
+
                       <div className="text-center">
-                        <div className="text-xl font-semibold text-gray-900">{question.views}</div>
+                        <div className="text-xl font-semibold text-gray-900">
+                          {question.views}
+                        </div>
                         <div className="text-gray-600">views</div>
                       </div>
                     </div>
 
                     {/* Content */}
                     <div className="flex-1">
-                      <a href="#" className="text-xl font-medium text-blue-600 hover:text-blue-700 mb-2 block">
+                      <a
+                        href="#"
+                        className="text-xl font-medium text-blue-600 hover:text-blue-700 mb-2 block"
+                      >
                         {question.title}
                       </a>
-                      <p className="text-gray-600 mb-4 line-clamp-2">{question.excerpt}</p>
-                      
+
+                      <p className="text-gray-600 mb-4 line-clamp-2">
+                        {question.description}
+                      </p>
+
                       <div className="flex items-center justify-between">
+
+                        {/* Tags */}
                         <div className="flex flex-wrap gap-2">
                           {question.tags.map((tag, idx) => (
-                            <span key={idx} className="px-3 py-1 bg-gray-100 text-gray-700 text-sm rounded hover:bg-gray-200 cursor-pointer">
+                            <span
+                              key={idx}
+                              className="px-3 py-1 bg-gray-100 text-gray-700 text-sm rounded hover:bg-gray-200 cursor-pointer"
+                            >
                               {tag}
                             </span>
                           ))}
                         </div>
-                        
-                        <div className="flex items-center space-x-2">
-                          <img
-                            src={question.authorAvatar}
-                            alt={question.author}
-                            className="w-6 h-6 rounded-full"
-                          />
-                          <span className="text-sm text-blue-600 font-medium">{question.author}</span>
-                          <span className="text-sm text-gray-500">asked {question.askedTime}</span>
+
+                        {/* Meta info */}
+                        <div className="text-sm text-gray-500">
+                          asked {question.askedTime} • user {question.userId}
                         </div>
+
                       </div>
                     </div>
                   </div>
@@ -302,18 +346,19 @@ const QuestionsPage: React.FC = () => {
               ))}
             </div>
 
-            {filteredQuestions.length === 0 && (
+
+            {/* {filteredQuestions.length === 0 && (
               <div className="bg-white rounded-lg shadow-sm p-12 text-center">
                 <p className="text-gray-600 text-lg">No questions found matching your criteria.</p>
               </div>
-            )}
+            )} */}
           </div>
           {/* Sidebar */}
           <div className="w-80 space-y-6">
             {/* Popular Tags */}
             <div className="bg-white rounded-lg shadow-sm p-6">
               <h2 className="text-lg font-bold text-gray-900 mb-4">Popular Tags</h2>
-              <div className="space-y-3">
+              {/* <div className="space-y-3">
                 {popularTags.map((tag, index) => (
                   <div key={index} className="flex items-center justify-between">
                     <span className="px-3 py-1 bg-gray-100 text-gray-700 text-sm rounded hover:bg-gray-200 cursor-pointer">
@@ -322,7 +367,7 @@ const QuestionsPage: React.FC = () => {
                     <span className="text-sm text-gray-600">× {tag.count}</span>
                   </div>
                 ))}
-              </div>
+              </div> */}
               <button className="mt-4 text-blue-600 hover:text-blue-700 text-sm font-medium flex items-center">
                 View all tags →
               </button>
