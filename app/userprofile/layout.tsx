@@ -5,7 +5,7 @@ export default async function ProtectedLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const user = await requireAuth(); // Protects everything in (protected) group
+  const user = await requireAuth();
   
   return (
     <div className="auth-wrapper">

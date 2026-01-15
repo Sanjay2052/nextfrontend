@@ -60,7 +60,7 @@ const AskQuestionPage: React.FC = () => {
         code: code.trim(), 
       };
 
-      await axios.post("http://localhost:8003/api/question", questionData);
+      await axios.post("/api/addquestion", questionData);
       alert('Question posted successfully!');
       setTitle('');
       setDetails('');

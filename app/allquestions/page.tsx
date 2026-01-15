@@ -308,7 +308,6 @@ const QuestionsPage: React.FC = () => {
               </div>
             )}
           </div>
-
           {/* Sidebar */}
           <div className="w-80 space-y-6">
             {/* Popular Tags */}

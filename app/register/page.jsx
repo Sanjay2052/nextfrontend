@@ -9,6 +9,9 @@ const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [domain, setDomain] = useState("");
+  console.log(name,email,password,domain);
+  
 
   const router = useRouter();
 
@@ -16,7 +19,7 @@ const Register = () => {
     try {
       const response = await axios.post(
         "http://localhost:8001/api/register",
-        { name, email, password }
+        { name, email, password, domain } 
       );
 
       console.log(response.data);
@@ -81,6 +84,24 @@ const Register = () => {
               />
             </div>
 
+            {/* --- DOMAIN SELECTION INPUT --- */}
+            <div className="input-group">
+              <label htmlFor="domain">Domain</label>
+              <select 
+                id="domain" name="domain"
+                value={domain} 
+                onChange={(e) => setDomain(e.target.value)}
+                required
+              >
+                <option value="Full Stack Developer">Full Stack Developer</option>
+                <option value="Frontend Developer">Frontend Developer</option>
+                <option value="Backend Developer">Backend Developer</option>
+                <option value="Manager">Manager</option>
+                <option value="UI/UX Designer">UI/UX Designer</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
             <div className="input-group">
               <label htmlFor="password">Password</label>
               <input
@@ -132,36 +153,16 @@ const Register = () => {
           border-radius: 50%;
           z-index: 0;
         }
-        .c1 {
-          width: 150px;
-          height: 150px;
-          top: -50px;
-          right: 10%;
-        }
-        .c2 {
-          width: 80px;
-          height: 80px;
-          top: 150px;
-          right: 5%;
-        }
-        .c3 {
-          width: 100px;
-          height: 100px;
-          bottom: 50px;
-          left: 5%;
-        }
-        .c4 {
-          width: 40px;
-          height: 40px;
-          bottom: 150px;
-          left: 8%;
-        }
+        .c1 { width: 150px; height: 150px; top: -50px; right: 10%; }
+        .c2 { width: 80px; height: 80px; top: 150px; right: 5%; }
+        .c3 { width: 100px; height: 100px; bottom: 50px; left: 5%; }
+        .c4 { width: 40px; height: 40px; bottom: 150px; left: 8%; }
 
         .login-container {
           display: flex;
           width: 900px;
           max-width: 95%;
-          min-height: 550px;
+          min-height: 580px;
           background: #fff;
           border-radius: 12px;
           box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
@@ -180,16 +181,8 @@ const Register = () => {
           text-align: center;
         }
 
-        .brand-logo {
-          font-size: 2.5rem;
-          font-weight: 800;
-        }
-
-        .description {
-          font-size: 0.95rem;
-          line-height: 1.6;
-          opacity: 0.9;
-        }
+        .brand-logo { font-size: 2.5rem; font-weight: 800; }
+        .description { font-size: 0.95rem; line-height: 1.6; opacity: 0.9; }
 
         .signup-text :global(a) {
           color: #fff;
@@ -199,18 +192,39 @@ const Register = () => {
 
         .right-side {
           flex: 1.2;
-          padding: 40px 50px;
+          padding: 35px 50px;
         }
+
+        .right-side h2 { margin-bottom: 20px; color: #333; }
 
         .input-group {
           margin-bottom: 15px;
         }
 
-        .input-group input {
+        .input-group label {
+          display: block;
+          font-size: 0.85rem;
+          margin-bottom: 5px;
+          color: #666;
+          font-weight: 600;
+        }
+
+        .input-group input, 
+        .input-group select {
           width: 100%;
-          padding: 10px;
+          padding: 11px;
           border: 1px solid #e0e0e0;
           border-radius: 6px;
+          background-color: #fff;
+          font-size: 0.9rem;
+          color: #333;
+        }
+
+        .input-group input:focus,
+        .input-group select:focus {
+            outline: none;
+            border-color: #448aff;
+            box-shadow: 0 0 0 2px rgba(68, 138, 255, 0.1);
         }
 
         .btn-login {
@@ -222,16 +236,43 @@ const Register = () => {
           border-radius: 6px;
           font-weight: bold;
           cursor: pointer;
+          margin-top: 5px;
+          transition: background 0.3s;
         }
 
-        .btn-login:hover {
-          background: #2a5bb0;
+        .btn-login:hover { background: #2a5bb0; }
+
+        .divider {
+            text-align: center;
+            margin: 18px 0;
+            color: #888;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
+
+        .social-area {
+            display: flex;
+            gap: 12px;
+        }
+
+        .social-btn {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            background: #fff;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+
+        .social-btn:hover { background: #f8f9fa; }
 
         @media (max-width: 768px) {
-          .login-container {
-            flex-direction: column;
-          }
+          .login-container { flex-direction: column; width: 100%; height: auto; }
+          .main-body { overflow-y: auto; height: auto; padding: 20px 0; }
         }
       `}</style>
     </div>
