@@ -31,7 +31,7 @@ export default function DevAskTagsPage() {
   return (
     <div className="min-h-screen bg-white flex flex-col font-sans selection:bg-blue-100">
       
-      {/* --- HEADER / NAVIGATION --- */}
+
       <nav className="border-b border-gray-100 px-4 md:px-8 py-4 flex items-center justify-between sticky top-0 bg-white/80 backdrop-blur-md z-50">
         <div className="flex items-center gap-10">
           <div className="flex items-center gap-2 cursor-pointer">

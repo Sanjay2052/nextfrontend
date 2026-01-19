@@ -1,9 +1,12 @@
-"client side"
+"use client";
+
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import React from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function Landing() {
+  let router=useRouter()
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
       {/* Navigation */}
@@ -20,7 +23,7 @@ export default function Landing() {
                 <span className="text-xl font-bold text-gray-900">DevAsk</span>
               </div>
               <div className="hidden md:flex space-x-6">
-                <a href="#" className="text-gray-700 hover:text-gray-900 font-medium">Questions</a>
+                <a href="/allquestions" className="text-gray-700 hover:text-gray-900 font-medium">Questions</a>
                 <a href="#" className="text-gray-700 hover:text-gray-900 font-medium">Tags</a>
                 <a href="#" className="text-gray-700 hover:text-gray-900 font-medium">Users</a>
               </div>
@@ -66,7 +69,7 @@ export default function Landing() {
               Join the Community
             </button>
             </Link>
-            <button className="px-8 py-4 bg-white text-gray-700 rounded-lg hover:bg-gray-50 font-semibold text-lg border-2 border-gray-200 flex items-center">
+            <button onClick={()=>router.push('/allquestions')}  className="px-8 py-4 bg-white text-gray-700 rounded-lg hover:bg-gray-50 font-semibold text-lg border-2 border-gray-200 flex items-center">
               Browse Questions
               <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />

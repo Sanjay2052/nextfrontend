@@ -38,7 +38,7 @@ const AskQuestionPage: React.FC = () => {
   };
 
   const addQuestion = async () => {
-    if (title.trim().length < 10) {
+    if (title.trim().length < 3) {
         alert("Title must be at least 10 characters.");
         return;
     }
@@ -101,7 +101,7 @@ const AskQuestionPage: React.FC = () => {
                 <span className="text-xl font-bold text-gray-900">DevAsk</span>
               </div>
               <nav className="flex space-x-6">
-                <a href="#" className="text-gray-600 hover:text-gray-900">Questions</a>
+                <a href="/allquestions" className="text-gray-600 hover:text-gray-900">Questions</a>
                 <a href="#" className="text-gray-600 hover:text-gray-900">Tags</a>
                 <a href="#" className="text-gray-600 hover:text-gray-900">Users</a>
               </nav>
